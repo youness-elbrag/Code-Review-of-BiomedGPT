@@ -61,6 +61,7 @@ BiomedGPT derives tasks from handcrafted instructions, avoiding task-specific mo
 <div align="center">
     <img src="assets/loss.png" width="900" height="250" />
 </div>
+
 It combines linguistic and visual tokens, including subwords, image codes, and location tokens. Subwords result from BPE tokenization, with 30% masked for masked language modeling. Object detection involves [Pix2Seq-generated](https://ai.googleblog.com/2022/04/pix2seq-new-language-interface-for.html).[Paper](https://github.com/gaopengcuhk/Unofficial-Pix2Seq) location tokens. Biomedical images undergo preprocessing using [VQ-GAN](https://medium.com/geekculture/vq-gan-explained-4827599b7cf2), producing sparse image codes for masked image modeling. Fine-tuning retains seq2seq, adapting to different datasets and tasks.To enhance quality and address classification challenges, a beam search with a prefix tree (trie) is used. This restricts candidates, boosting decoding efficiency. In trie-based beam search, invalid tokens have -∞ logits, ensuring valid token consideration. This strategy quickens validation during **fine-tuning**, as shown in experiments by the authors.
 
 ### Experiments
