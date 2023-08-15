@@ -48,3 +48,12 @@ BiomedGPT is designed based on the [BART architecture](https://huggingface.co/do
 
 * **Input/Output Unification**
 
+BiomedGPT processes inputs (images, language, bounding boxes) using CNNs for images and ResNet for patches. Linguistic input is tokenized with [BPE is used for subword tokenization](https://huggingface.co/docs/transformers/tokenizer_summary). It handles varied modalities using a finite token vocabulary, including frozen image [quantization](https://medium.com/@joel_34050/quantization-in-deep-learning-478417eab72b), object descriptors, and sparse image encoding. Text outputs use BPE tokens. Images are encoded sparsely, bounding boxes as location token sequences. Task-independent approach for versatile outputs.
+
+* **Natural Language as a Task Manager**:
+BiomedGPT derives tasks from handcrafted instructions, avoiding task-specific modules. It handles varied task types like vision-only, text-only, and vision-language. Pretraining involves masked image modeling, infilling, and object detection. It learns text-only through masked language modeling. For fine-tuning, it extends to tasks like classification, summarization, and inference, guided by task-specific instructions.
+
+* **Generative Pretraining via Seq2seq** : 
+
+[Autoregressive or seq2seq modeling](https://github.com/christianversloot/machine-learning-articles/blob/main/differences-between-autoregressive-autoencoding-and-sequence-to-sequence-models-in-machine-learning.md) is vital for sequential tasks like language modeling. BiomedGPT, utilizing parameter θ, trains autoregressively via the chain rule. It combines linguistic and visual tokens, including subwords, image codes, and location tokens. Subwords result from BPE tokenization, with 30% masked for masked language modeling. Object detection involves Pix2Seq-generated location tokens. Biomedical images undergo preprocessing using VQ-GAN, producing sparse image codes for masked image modeling. Fine-tuning retains seq2seq, adapting to different datasets and tasks.To enhance quality and address classification challenges, a beam search with a prefix tree (trie) is used. This restricts candidates, boosting decoding efficiency. In trie-based beam search, invalid tokens have -∞ logits, ensuring valid token consideration. This strategy quickens validation during fine-tuning, as shown in experiments by the authors.
+
