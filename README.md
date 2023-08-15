@@ -17,9 +17,10 @@ In this repo Provide General Overview how does BiomedGPT Built to tackle Multi-M
 1. [background](#background)
 2. [paper-insghits](#paper-insghits)
 3. [BiomedGPT-Pipeline](#BiomedGPT-Pipeline)
-4. [ENVIREMNET-SETUP](#ENVIREMNET-SETUP)
-5. [RESULTS](#Results)
+4. [Experiments](#Experiments)
+5. [Code-Review](#Code-Review)
 6. [CONCLUSION](#CONCLUSION)
+7. [Limitation](#Limitation)
 
 ### background
 
@@ -57,3 +58,44 @@ BiomedGPT derives tasks from handcrafted instructions, avoiding task-specific mo
 
 [Autoregressive or seq2seq modeling](https://github.com/christianversloot/machine-learning-articles/blob/main/differences-between-autoregressive-autoencoding-and-sequence-to-sequence-models-in-machine-learning.md) is vital for sequential tasks like language modeling. BiomedGPT, utilizing parameter θ, trains autoregressively via the chain rule. It combines linguistic and visual tokens, including subwords, image codes, and location tokens. Subwords result from BPE tokenization, with 30% masked for masked language modeling. Object detection involves [Pix2Seq-generated](https://ai.googleblog.com/2022/04/pix2seq-new-language-interface-for.html).[Paper](https://github.com/gaopengcuhk/Unofficial-Pix2Seq) location tokens. Biomedical images undergo preprocessing using [VQ-GAN](https://medium.com/geekculture/vq-gan-explained-4827599b7cf2), producing sparse image codes for masked image modeling. Fine-tuning retains seq2seq, adapting to different datasets and tasks.To enhance quality and address classification challenges, a beam search with a prefix tree (trie) is used. This restricts candidates, boosting decoding efficiency. In trie-based beam search, invalid tokens have -∞ logits, ensuring valid token consideration. This strategy quickens validation during **fine-tuning**, as shown in experiments by the authors.
 
+### Experiments
+The models are pre-trained with [**10 Nvidia A5000 GPUs**](#LoRa) and mixed precision, except for the models used for fine-tuning downstream tasks.
+
+* **Results on Unimodal Datasets** :
+
+    The authors tested their BiomedGPT-Base model on three unimodal tasks across 14 datasets. In image classification, the model outperformed on 9 of 10 image-only datasets, except for RetinaMNIST, which was designed for regression. In text-only tasks, the model scored 78.6% accuracy on natural language inference (MedNLI dataset), lower than the 86.5% state-of-the-art. Text summarization of doctor-patient conversations yielded unsatisfactory [ROUGE-L scores](https://medium.com/nlplanet/two-minutes-nlp-learn-the-rouge-metric-by-examples-f179cc285499). Potential reasons for performance disparity include model scale, smaller training corpus, and divergent data between biomedical articles and clinical notes.
+
+<div align="center">
+    <img src="assets/results.png" width="500" height="250" />
+</div>
+
+* **Results on Multimodal Datasets**:
+
+    BiomedGPT excels in image captioning and visual question answering (VQA), utilizing datasets like SLAKE, PathVQA, and VQA-RAD. Limited public multimodal biomedical datasets lead to pre-training on training sets and evaluation on unseen testing sets. BiomedGPT surpasses previous methods in [CIDEr, notably achieving a 273% gain on PEIR Gross](https://arxiv.org/pdf/1905.13302.pdf). Although it lags in IU X-ray's ROUGE-L, the model choice based on CIDEr during validation is cited. SLAKE and PathVQA see substantial improvements. Further fine-tuning epochs could enhance accuracy, with semantically accurate outputs noted, though evaluation may not fully capture semantic understanding.
+
+* **Results on Intra- & Inter-distribution Transfer**:
+
+    Intra- and inter-distribution inference tests assessed BiomedGPT's pre-trained checkpoints on seen and unseen datasets. With SLAKE and [PathVQA](https://arxiv.org/abs/2003.10286) pre-training, BiomedGPT excels, especially in larger models, while the ImageNet-based OFA model suffers notable performance decline. BiomedGPT's potential overfitting to familiar domains hinders understanding of new questions, generating controlled outputs. Example: BiomedGPT-Base misinterpreting VQA as image gen. While text-only outputs partially match, they don't align with open-ended truth. Catastrophic performance occurs in VQA-RAD. This underscores challenges in instruction-guided pretraining for a comprehensive biomedical model. Future work entails data augmentation, synthetic datasets, and privacy solutions.
+
+### Code-Review
+Pass
+
+### CONCLUSION 
+
+BiomedGPT demonstrates competitive performance in vision, language, and multimodal tasks by unifying diverse biomedical modalities and tasks within a seq2seq pretraining framework. Incorporating a wide range of biomedical tasks and modalities during pretraining enhances fine-tuning efficiency and overall model performance. The challenge faced by OFA, a generalist model, in aligning image-text pairs during fine-tuning underscores the significance of effective multi-modal, multi-task pretraining, a strength of BiomedGPT. Moreover, increasing model size significantly enhances performance.
+
+### Limitation 
+
+in here i will suggested some of solutions could improve BioMedGPT-Based model based on it owns limitation :
+
+1. BiomedGPT's response to instructions can be erratic, suggesting the need to enhance its understanding through a broader range of high-quality instruction sets during pretraining.
+
+2. Achieving data diversity by balancing size ratios and training sequences across different biomedical modalities warrants investigation.
+
+3. Implementing Reinforcement Learning from human or AI feedback (RLF) to align BiomedGPT with intended outcomes is promising, albeit resource-intensive for specific biomedical applications.
+
+4. Navigating differences between clinical notes, general/biomedical text, and vision-only tasks presents difficulties for text-only downstream tasks. Building a comprehensive vocabulary across domains and adjusting text input ratios during pretraining could mitigate these challenges.
+
+5. Efficient fine-tuning for large-scale generalist biomedical models requires attention to training speed and memory usage. Parameter-efficient fine-tuning (PEFT) offers a potential solution worth exploring or Re-Tune using LoRa .
+
+6. Experimentation with prompt tuning yielded unexpected outcomes, warranting further investigation.
