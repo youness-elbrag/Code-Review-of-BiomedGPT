@@ -84,7 +84,13 @@ The models are pre-trained with [**10 Nvidia A5000 GPUs**](#LoRa) and mixed prec
     Intra- and inter-distribution inference tests assessed BiomedGPT's pre-trained checkpoints on seen and unseen datasets. With SLAKE and [PathVQA](https://arxiv.org/abs/2003.10286) pre-training, BiomedGPT excels, especially in larger models, while the ImageNet-based OFA model suffers notable performance decline. BiomedGPT's potential overfitting to familiar domains hinders understanding of new questions, generating controlled outputs. Example: BiomedGPT-Base misinterpreting VQA as image gen. While text-only outputs partially match, they don't align with open-ended truth. Catastrophic performance occurs in VQA-RAD. This underscores challenges in instruction-guided pretraining for a comprehensive biomedical model. Future work entails data augmentation, synthetic datasets, and privacy solutions.
 
 ### Code-Review
-Pass
+in Section we will go for main folder and file that related how does BioMedGPT designed because the code based on Project is bigger and include many external packages , which means we will cover most relative file used to build the based model following :
+
+* **Handling Multi-modalites Input/Output**:
+
+
+
+
 
 ### CONCLUSION 
 
