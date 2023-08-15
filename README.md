@@ -8,7 +8,7 @@ In this repo Provide General Overview how does BiomedGPT Built to tackle Multi-M
 * masked language modeling 
 
 <div align="center">
-    <img src="assets/modeling.png" width="500" height="250" />
+    <img src="assets/modeling.png" width="600" height="350" />
 </div>
 
 **Notation**: WE WILL SPLIT OUR REVIEW PAPER AND CODE FOLLOWING SECTION ..
