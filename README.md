@@ -86,10 +86,12 @@ The models are pre-trained with [**10 Nvidia A5000 GPUs**](#LoRa) and mixed prec
 ### Code-Review
 in Section we will go for main folder and file that related how does BioMedGPT designed because the code based on Project is bigger and include many external packages , which means we will cover most relative file used to build the based model following :
 
-* **Handling Multi-modalites Input/Output**:
+* **BiomedGPT model**:
+BiomedGPT is developed based on OFA.
 
-
-
+<div align="center">
+    <img src="assets/model.png" width="600" height="300" />
+</div>
 
 
 ### CONCLUSION 
