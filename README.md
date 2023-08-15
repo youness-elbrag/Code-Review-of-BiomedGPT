@@ -59,7 +59,7 @@ BiomedGPT derives tasks from handcrafted instructions, avoiding task-specific mo
 [Autoregressive or seq2seq modeling](https://github.com/christianversloot/machine-learning-articles/blob/main/differences-between-autoregressive-autoencoding-and-sequence-to-sequence-models-in-machine-learning.md) is vital for sequential tasks like language modeling. BiomedGPT, utilizing parameter θ, trains autoregressively via the chain rule. 
 
 <div align="center">
-    <img src="assets/loss.png" width="700" height="250" />
+    <img src="assets/loss.png" width="900" height="250" />
 </div>
 It combines linguistic and visual tokens, including subwords, image codes, and location tokens. Subwords result from BPE tokenization, with 30% masked for masked language modeling. Object detection involves [Pix2Seq-generated](https://ai.googleblog.com/2022/04/pix2seq-new-language-interface-for.html).[Paper](https://github.com/gaopengcuhk/Unofficial-Pix2Seq) location tokens. Biomedical images undergo preprocessing using [VQ-GAN](https://medium.com/geekculture/vq-gan-explained-4827599b7cf2), producing sparse image codes for masked image modeling. Fine-tuning retains seq2seq, adapting to different datasets and tasks.To enhance quality and address classification challenges, a beam search with a prefix tree (trie) is used. This restricts candidates, boosting decoding efficiency. In trie-based beam search, invalid tokens have -∞ logits, ensuring valid token consideration. This strategy quickens validation during **fine-tuning**, as shown in experiments by the authors.
 
@@ -71,7 +71,7 @@ The models are pre-trained with [**10 Nvidia A5000 GPUs**](#LoRa) and mixed prec
     The authors tested their BiomedGPT-Base model on three unimodal tasks across 14 datasets. In image classification, the model outperformed on 9 of 10 image-only datasets, except for RetinaMNIST, which was designed for regression. In text-only tasks, the model scored 78.6% accuracy on natural language inference (MedNLI dataset), lower than the 86.5% state-of-the-art. Text summarization of doctor-patient conversations yielded unsatisfactory [ROUGE-L scores](https://medium.com/nlplanet/two-minutes-nlp-learn-the-rouge-metric-by-examples-f179cc285499). Potential reasons for performance disparity include model scale, smaller training corpus, and divergent data between biomedical articles and clinical notes.
 
 <div align="center">
-    <img src="assets/result.png" width="500" height="750" />
+    <img src="assets/result.png" width="1000" height="500" />
 </div>
 
 * **Results on Multimodal Datasets**:
