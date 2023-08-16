@@ -4,7 +4,8 @@ from BioMedGPT.fairseq import utils
 from BioMedGPT.fairseq.models import FairseqEncoder, FairseqIncrementalDecoder
 from BioMedGPT.fairseq.modules import AdaptiveInput, AdaptiveSoftmax
 from BioMedGPT.fairseq.criterions import FairseqCriterion
-from blocks_Model.criterions import AdjustLabelSmoothedCrossEntropyCriterion  # Import your AdjustLabelSmoothedCrossEntropyCriterion class from the module
+# import criterions to test it 
+from blocks_Model.criterions import AdjustLabelSmoothedCrossEntropyCriterion  
 
 class DummyEncoder(FairseqEncoder):
     def forward(self, src_tokens, src_lengths):
