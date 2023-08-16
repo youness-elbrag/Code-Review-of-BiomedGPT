@@ -558,6 +558,12 @@ agruments bass to reconstruct the BioMedGPT is **ofa.py**
 
 ### Runing Tiny Version Of BioMedGPT
 
+**Setup ENV** :
+
+```shell
+conda env create -f biomedgpt.yml && python -m pip install pip==21.2.4
+```
+
 **Notation**: make your machine satisfiace the requimmenats Hardware to run the model on because of the BioMedGPT run on **10 GPI invdia A5000**
 
 
