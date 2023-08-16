@@ -1,36 +1,21 @@
-### Code-Review
-in Section we will go for main folder and file that related how does BioMedGPT designed because the code based on Project is bigger and include many external packages , which means we will cover most relative file used to build the based model following :
+import torch
+import torch.nn as nn
+from BioMedGPT.models.ofa.resnet import *
 
-* **BiomedGPT model**:
-
-BiomedGPT is developed based on OFA. in Case we will focus on the most important **building Blocks of BioMedGPT** 
-
-<div align="center">
-    <img src="./assets/blocksModel/model.png" width="600" height="300" />
-</div>
-
-###### building Blocks of BioMedGPT : 
-
-1. **Handling Multi-modalites Input/Output**:
-
-we explained how does BioMedGPT Handle multi-modalites fisrt let us dive in to the adjustment within Model done from Co-Authors 
-
-* **add ResNet Blocks**:
-
-To enable inputs with a wide range of modalities, including images, language, and bounding boxes, to be
-processed within a single model, it is necessary to embed them in a shared and unified space. For visual inputs,
-we directly apply CNN backbones to relax the heavy image feature extraction process, including object
-detection. 
-
-<div align="center">
-    <img src="./assets/blocksModel/resnet.png" width="400" height="200" />
-</div>
-
-Specifically, BiomedGPT receives the raw image $\mathbf{x}_v \in \mathbb{R}^{H \times W \times C}$ and maps it into a flattened 1D sequence of patches $\mathbf{x}_p \in \mathbb{R}^{N \times D}$ via a ResNet module as input for the transformer, where $N = \frac{H \times W}{P^2}$ is the number of patches given the patch size of $P \times P$, and $D$ is the fixed hidden size of the transformer layers.
-
-```python
 class ResNet(nn.Module):
+    """
+    ResNet model implementation.
 
+    Args:
+        layers (list of int): Number of residual blocks in each layer.
+        zero_init_residual (bool, optional): Zero-initialize the last BN in each residual branch.
+        groups (int, optional): Number of groups in 3x3 convolution.
+        width_per_group (int, optional): Width per group in 3x3 convolution.
+        replace_stride_with_dilation (list of bool or None, optional): Replace stride with dilation in specified layers.
+        norm_layer (nn.Module, optional): Normalization layer to use.
+        drop_path_rate (float, optional): Drop path rate for stochastic depth.
+
+    """
     def __init__(self, layers, zero_init_residual=False,
                  groups=1, width_per_group=64, replace_stride_with_dilation=None,
                  norm_layer=None, drop_path_rate=0.0):
@@ -68,6 +53,9 @@ class ResNet(nn.Module):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
 
+        # Zero-initialize the last BN in each residual branch,
+        # so that the residual branch starts with zeros, and each residual block behaves like an identity.
+        # This improves the model by 0.2~0.3% according to https://arxiv.org/abs/1706.02677
         if zero_init_residual:
             for m in self.modules():
                 if isinstance(m, Bottleneck):
@@ -76,6 +64,21 @@ class ResNet(nn.Module):
                     nn.init.constant_(m.bn2.weight, 0)
 
     def _make_layer(self, block, planes, blocks, stride=1, dilate=False, drop_path_rate=0.0):
+        """
+        Create a sequence of residual blocks.
+
+        Args:
+            block (nn.Module): Type of residual block to create.
+            planes (int): Number of output channels for each block.
+            blocks (int): Number of blocks to create.
+            stride (int, optional): Stride for the first block.
+            dilate (bool, optional): Apply dilation to the block.
+            drop_path_rate (float, optional): Drop path rate for stochastic depth.
+
+        Returns:
+            nn.Sequential: Sequence of residual blocks.
+
+        """
         norm_layer = self._norm_layer
         downsample = None
         previous_dilation = self.dilation
@@ -102,7 +105,16 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def _forward_impl(self, x):
-        # See note [TorchScript super()]
+        """
+        Internal implementation of the forward pass.
+
+        Args:
+            x (torch.Tensor): Input tensor.
+
+        Returns:
+            torch.Tensor: Output tensor.
+
+        """
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
@@ -115,22 +127,14 @@ class ResNet(nn.Module):
         return x
 
     def forward(self, x):
+        """
+        Forward pass of the ResNet model.
+
+        Args:
+            x (torch.Tensor): Input tensor.
+
+        Returns:
+            torch.Tensor: Output tensor.
+
+        """
         return self._forward_impl(x)
-
-```
-
-**Addionally** : we have an Hyper-parameter **resnet_drop_path_rate** used 
-
- * Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks). This is the same as the DropConnect impl I created for EfficientNet, etc networks, however, the original name is misleading as 'Drop Connect' is a.sh different form of dropout in a.sh separate paper.See discussion: https://github.com/tensorflow/tpu/issues/494#issuecomment-532968956 ... I've opted for changing the layer and argument names to 'drop path' rather than mix DropConnect as a.sh layer name and use 'survival rate' as the argument.
-
- check following [File](blocks_Model/dropath.py)
-
-
-and has been adjust into file **ofa** which the main transformer model use to built BioMedGPT
-
-```python
-    unify_transformer.py    
-```
-
-
-* **byte-pair encoding**: 
