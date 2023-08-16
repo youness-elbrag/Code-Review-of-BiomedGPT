@@ -91,7 +91,7 @@ only we will look most important building block adjusment done by Co-authors to 
 **Note**: i provided the Test of some model blocks used in BioMedGPT such **ResNet** and **Dropath** and others functionalities [specific_file](code-review/specific_file) 
 look at [TEST folder](code-review/test)
 
-**Note**: may Test Fail to execute because the functional i have adjusted them
+**Note**: may Test Fail to execute because the functionalities i have adjusted them
 
 ### CONCLUSION 
 
