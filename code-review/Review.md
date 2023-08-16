@@ -556,3 +556,31 @@ agruments bass to reconstruct the BioMedGPT is **ofa.py**
 @register_model_architecture("ofa", "ofa_tiny") #=> **BioMedGPT-tiny**
 ```
 
+### Runing Tiny Version Of BioMedGPT
+
+**Notation**: make your machine satisfiace the requimmenats Hardware to run the model on because of the BioMedGPT run on **10 GPI invdia A5000**
+
+
+to run the the version of BioMedGPT following the Steps :
+
+1. Download the checkPoints of the model and repalce it in folder **checkpoints/biomedgpt_tiny.pt**
+
+2. Prepare the Dataset needs to adapte the paramter within the file **pretrain_tiny.sh**
+
+```shell
+
+data_dir=../../datasets/pretraining
+data=${data_dir}/vision_language.tsv
+text_data=${data_dir}/text.tsv
+image_data=${data_dir}/image.tsv
+detection_data=${data_dir}/detection.tsv
+
+```
+
+
+3. Final Stage Run the script following Command :
+
+```shell
+./pretrain_tiny.sh
+
+```
