@@ -6,7 +6,7 @@ in Section we will go for main folder and file that related how does BioMedGPT d
 BiomedGPT is developed based on OFA. in Case we will focus on the most important **building Blocks of BioMedGPT** 
 
 <div align="center">
-    <img src="./assets/blocksModel/model.png" width="600" height="300" />
+    <img src="assets/model.png" width="600" height="300" />
 </div>
 
 ###### building Blocks of BioMedGPT : 
@@ -23,7 +23,7 @@ we directly apply CNN backbones to relax the heavy image feature extraction proc
 detection. 
 
 <div align="center">
-    <img src="./assets/blocksModel/resnet.png" width="400" height="200" />
+    <img src="assets/resnet.png" width="400" height="200" />
 </div>
 Specifically, BiomedGPT receives the raw image $\mathbf{x}_v \in \mathbb{R}^{H \times W \times C}$ and maps it into a flattened 1D sequence of patches $\mathbf{x}_p \in \mathbb{R}^{N \times D}$ via a ResNet module as input for the transformer, where $N = \frac{H \times W}{P^2}$ is the number of patches given the patch size of $P \times P$, and $D$ is the fixed hidden size of the transformer layers.
 
