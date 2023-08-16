@@ -85,8 +85,8 @@ The models are pre-trained with [**10 Nvidia A5000 GPUs**](#LoRa) and mixed prec
 
 ### Code-Review
 in this Section we will go for main folder and file that related how does BioMedGPT designed on [OFA](https://github.com/OFA-Sys/OFA)  which based on sequence modeling toolkit [fairseq](https://github.com/facebookresearch/fairseq)
-only we will look most important building block adjusment done by Co-authors to follow PLEASE click [here](Code-Review-of-BiomedGPT/code-review/Review.md)
-s
+only we will look most important building block adjusment done by Co-authors to follow PLEASE click [here](code-review/Review.md)
+
 
 ### CONCLUSION 
 
