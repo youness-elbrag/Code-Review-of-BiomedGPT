@@ -11,18 +11,15 @@ def register_embedding_tokens(self, ans2label_dict, src_dict, bpe):
         None
 
     """
-    # Log the action of registering embedding tokens
     logger.info("Registering embedding tokens")
     
     # Initialize a list to store answer tensors
     self.ans_tensor_list = []
     
-    # Iterate over the answer-to-label dictionary
     for i in range(len(ans2label_dict)):
         # Get the answer corresponding to the current label
         ans = src_dict[-len(ans2label_dict) + i]
         
-        # Preprocess the answer by removing special characters and replacing underscores with spaces
         ans = ans[5:-1].replace('_', ' ')
         
         # Encode the preprocessed answer using BPE and convert it to a long tensor
@@ -32,5 +29,4 @@ def register_embedding_tokens(self, ans2label_dict, src_dict, bpe):
             append_eos=False
         ).long()
         
-        # Append the answer tensor to the list
         self.ans_tensor_list.append(ans_tensor)

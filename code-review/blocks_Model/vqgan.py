@@ -1,6 +1,4 @@
 import sys
-
-sys.path.append('../../../')
 import argparse
 import base64
 from io import BytesIO
@@ -15,12 +13,20 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
 
+# Set image loading options
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 ImageFile.MAX_IMAGE_PIXELS = None
 Image.MAX_IMAGE_PIXELS = None
 
-
 class VQGANDataset(Dataset):
+    """
+    Dataset class for loading images and generating code images.
+
+    Args:
+        file (str): Path to the data file.
+        selected_cols (str): List of selected columns.
+
+    """
     def __init__(self, file, selected_cols):
         self.reader = FileDataset(
             file,
@@ -52,8 +58,17 @@ class VQGANDataset(Dataset):
         elif len(column_l) == 2:
             return {"code_image": code_image, "image_id": image_id}
 
-
 def custom_to_pil(x):
+    """
+    Convert a PyTorch tensor to a PIL image.
+
+    Args:
+        x (torch.Tensor): Input tensor.
+
+    Returns:
+        PIL.Image: Output PIL image.
+
+    """
     x = x.detach().cpu()
     x = torch.clamp(x, -1., 1.)
     x = (x + 1.) / 2.
@@ -64,17 +79,46 @@ def custom_to_pil(x):
         x = x.convert("RGB")
     return x
 
-
 def map_pixels(x, eps=0.1):
+    """
+    Map pixel values to a given range.
+
+    Args:
+        x (torch.Tensor): Input tensor.
+        eps (float, optional): Epsilon value.
+
+    Returns:
+        torch.Tensor: Output tensor.
+
+    """
     return (1 - 2 * eps) * x + eps
 
-
 def preprocess_vqgan(x):
+    """
+    Preprocess an image tensor for VQ-VAE-GAN.
+
+    Args:
+        x (torch.Tensor): Input tensor.
+
+    Returns:
+        torch.Tensor: Preprocessed tensor.
+
+    """
     x = 2. * x - 1.
     return x
 
-
 def image_to_base64(img, format):
+    """
+    Convert a PIL image to a base64 string.
+
+    Args:
+        img (PIL.Image): Input image.
+        format (str): Image format.
+
+    Returns:
+        str: Base64-encoded image string.
+
+    """
     output_buffer = BytesIO()
     img.save(output_buffer, format=format)
     byte_data = output_buffer.getvalue()
@@ -82,8 +126,8 @@ def image_to_base64(img, format):
     base64_str = str(base64_str, encoding='utf-8')
     return base64_str
 
-
 if __name__ == "__main__":
+    # Parse command line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("--file", type=str, default="")
     parser.add_argument("--outputs", type=str, default="")
@@ -98,7 +142,7 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int, default=32)
     args = parser.parse_args()
 
-    # device = torch.device('cuda:9')
+    # Load VQ-VAE-GAN model and configuration
     vqgan_config = OmegaConf.load(args.vqgan_config_path)
     vqgan = GumbelVQ(**vqgan_config.model.params)
     sd = torch.load(args.vqgan_model_path, map_location="cpu")["state_dict"]
@@ -107,15 +151,18 @@ if __name__ == "__main__":
         v.requires_grad = False
     image_tokenizer = vqgan.cuda().eval()
 
+    # Open output file for writing
     writer = open(args.outputs, 'w')
 
     print("begin process")
 
     data_cnt = 0
 
+    # Load and preprocess dataset
     dataset = VQGANDataset(args.file, args.selected_cols)
     dataloader = DataLoader(dataset, batch_size=args.batch_size)
 
+    # Process data and write to output file
     for data in dataloader:
         batch_size = data["code_image"].size()[0]
         with torch.no_grad():
