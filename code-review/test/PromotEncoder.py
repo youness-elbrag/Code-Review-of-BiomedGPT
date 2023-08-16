@@ -1,6 +1,6 @@
 import unittest
 import torch
-from blocks_Model.PromptEncoder import PromptEncoder  
+from specific_file.PromptEncoder import PromptEncoder  
 
 class TestPromptEncoder(unittest.TestCase):
 

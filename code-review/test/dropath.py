@@ -1,7 +1,7 @@
 import unittest
 import torch
 import torch.nn as nn
-from blocks_Model.dropath import drop_path, DropPath
+from specific_file.dropath import drop_path, DropPath
 
 """
 Test Drop Path Function and Module:

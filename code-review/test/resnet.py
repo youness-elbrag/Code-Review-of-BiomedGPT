@@ -1,7 +1,7 @@
 import unittest
 import torch
 import torch.nn as nn
-from blocks_Model.Resnet import ResNet
+from specific_file.Resnet import ResNet
 
 class TestResNet(unittest.TestCase):
 

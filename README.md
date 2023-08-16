@@ -88,7 +88,8 @@ in this Section we will go for main folder and file that related how does BioMed
 only we will look most important building block adjusment done by Co-authors to follow PLEASE click [here](code-review/Review.md)
 
 
-**Note**: i provided the Test of some model blocks used in BioMedGPT such **ResNet** and **Dropath** and others functionalities look at [TEST folder](code-review/test)
+**Note**: i provided the Test of some model blocks used in BioMedGPT such **ResNet** and **Dropath** and others functionalities [specific_file](code-review/specific_file) 
+look at [TEST folder](code-review/test)
 
 ### CONCLUSION 
 

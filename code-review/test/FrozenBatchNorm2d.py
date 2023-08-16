@@ -1,7 +1,7 @@
 import unittest
 import torch
 from torch import nn
-from blocks_Model.FrozenBatchNorm2d import FrozenBatchNorm2d  
+from specific_file.FrozenBatchNorm2d import FrozenBatchNorm2d  
 
 class TestFrozenBatchNorm2d(unittest.TestCase):
 
