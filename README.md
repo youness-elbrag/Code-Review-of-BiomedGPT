@@ -109,3 +109,11 @@ in here i will suggested some of solutions could improve BioMedGPT-Based model b
 5. Efficient fine-tuning for large-scale generalist biomedical models requires attention to training speed and memory usage. Parameter-efficient fine-tuning (PEFT) offers a potential solution worth exploring or Re-Tune using LoRa .
 
 6. Experimentation with prompt tuning yielded unexpected outcomes, warranting further investigation.
+
+
+### Related Projects 
+
+* [LLaVA-Med](https://github.com/microsoft/LLaVA-Med)
+* [LLaVA](https://github.com/haotian-liu/LLaVA)
+* [OFA](https://github.com/OFA-Sys/OFA)
+* [LaVIN](https://github.com/luogen1996/LaVIN)
