@@ -137,7 +137,7 @@ and has been adjust into file **ofa** which the main transformer model use to bu
  they used byte-pair encoding (BPE) to perform the subword tokenization.The subwords are then embedded into the input features.
 
  <div align="center">
-    <img src="assets/BPE.png" width="400" height="200" />
+    <img src="assets/BPE.png" width="200" height="250" />
 </div>
 
  ```python
