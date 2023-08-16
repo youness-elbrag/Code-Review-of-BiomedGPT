@@ -91,6 +91,8 @@ only we will look most important building block adjusment done by Co-authors to 
 **Note**: i provided the Test of some model blocks used in BioMedGPT such **ResNet** and **Dropath** and others functionalities [specific_file](code-review/specific_file) 
 look at [TEST folder](code-review/test)
 
+**Note**: may Test Fail to execute because the functional i have adjusted them , are Examples 
+
 ### CONCLUSION 
 
 BiomedGPT demonstrates competitive performance in vision, language, and multimodal tasks by unifying diverse biomedical modalities and tasks within a seq2seq pretraining framework. Incorporating a wide range of biomedical tasks and modalities during pretraining enhances fine-tuning efficiency and overall model performance. The challenge faced by OFA, a generalist model, in aligning image-text pairs during fine-tuning underscores the significance of effective multi-modal, multi-task pretraining, a strength of BiomedGPT. Moreover, increasing model size significantly enhances performance.
